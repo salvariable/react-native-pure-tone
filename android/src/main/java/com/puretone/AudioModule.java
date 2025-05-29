@@ -1,4 +1,4 @@
-package com.musicdragon;
+package com.puretone;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
