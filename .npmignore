@@ -1,0 +1,6 @@
+example
+node_modules
+__tests__
+ios/build
+android/build
+*.log
