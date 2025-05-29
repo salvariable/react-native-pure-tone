@@ -13,4 +13,6 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,swift}"
   s.platform     = :ios, "12.0"
   s.requires_arc = true
+  s.dependency "React-Core"
+  s.dependency "ExpoModulesCore"	
 end
