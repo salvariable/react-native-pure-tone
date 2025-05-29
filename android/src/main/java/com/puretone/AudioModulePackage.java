@@ -1,4 +1,4 @@
-package com.musicdragon;
+package com.puretone;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
