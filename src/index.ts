@@ -5,10 +5,15 @@ const { AudioModule } = NativeModules;
 export type WaveType = 'sine' | 'square' | 'triangle' | 'sawtooth';
 
 export function playTone(freq: number, durationMs = 500, wave: WaveType = 'sine'): void {
-  if (Platform.OS === 'ios' || Platform.OS === 'android') {
-    AudioModule.playToneWithWave(freq, durationMs, wave);
-  } else if (Platform.OS === 'web') {
+  if (Platform.OS === 'web') {
     playToneWeb(freq, durationMs, wave);
+    return;
+  }
+
+  try {
+    AudioModule?.playToneWithWave(freq, durationMs, wave);
+  } catch (error) {
+    console.warn('[pure-tone] Native module unavailable or failed to call playToneWithWave:', error);
   }
 }
 
