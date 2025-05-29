@@ -1,0 +1,43 @@
+{
+  "name": "react-native-pure-tone",
+  "version": "0.1.2",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "react-native": "src/index.ts",
+  "description": "Generate pure tones in React Native and Expo (Android, iOS, Web)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salvariable/react-native-pure-tone.git"
+  },
+  "author": "Salvador Bolanos (Salvariable)",
+  "license": "MIT",
+  "keywords": [
+    "react-native",
+    "expo",
+    "tone",
+    "synthesis",
+    "audio",
+    "pure-tone",
+    "ios",
+    "android",
+    "web"
+  ],
+  "peerDependencies": {
+    "expo": ">=50.0.0",
+    "react-native": ">=0.72.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "files": [
+    "dist",
+    "android",
+    "ios",
+    "react-native.config.js",
+    "react-native-pure-tone.podspec"
+  ],
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
