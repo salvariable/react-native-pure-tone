@@ -1,19 +1,34 @@
 import { NativeModules, Platform } from 'react-native';
 const { AudioModule } = NativeModules;
-export function playTone({ frequency, duration = 0.5, waveform = 'sine' }) {
+export function playTone(input) {
+    const duration = (note) => note.duration ?? 1.5;
+    const waveform = (note) => note.waveform ?? 'sine';
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        const durationMs = duration * 1000;
-        AudioModule?.playToneWithWave?.(frequency, durationMs, waveform);
+        if (Array.isArray(input)) {
+            for (const note of input) {
+                AudioModule?.playToneWithWave(note.frequency, duration(note) * 1000, waveform(note));
+            }
+        }
+        else {
+            AudioModule?.playToneWithWave(input.frequency, duration(input) * 1000, waveform(input));
+        }
     }
     else if (Platform.OS === 'web') {
-        playToneWeb(frequency, duration, waveform);
+        if (Array.isArray(input)) {
+            for (const note of input) {
+                playToneWeb(note.frequency, duration(note) * 1000, waveform(note));
+            }
+        }
+        else {
+            playToneWeb(input.frequency, duration(input) * 1000, waveform(input));
+        }
     }
     else {
-        console.warn('[pure-tone] Platform not supported.');
+        console.warn('[pure-tone] Unsupported platform or missing native module.');
     }
 }
-function playToneWeb(freq, duration, wave) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+function playToneWeb(freq, durationMs, wave) {
+    const AudioContextClass = (window.AudioContext || window.webkitAudioContext);
     const context = new AudioContextClass();
     const oscillator = context.createOscillator();
     const gainNode = context.createGain();
@@ -23,5 +38,5 @@ function playToneWeb(freq, duration, wave) {
     oscillator.connect(gainNode);
     gainNode.connect(context.destination);
     oscillator.start();
-    oscillator.stop(context.currentTime + duration);
+    oscillator.stop(context.currentTime + durationMs / 1000);
 }
