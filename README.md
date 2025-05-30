@@ -59,23 +59,12 @@ playTone({
 
 ---
 
-## 🎵 Play Chords
-
-```ts
-playTone([
-  { frequency: 440 },       // A4
-  { frequency: 554.37 },    // C#5
-  { frequency: 659.25 }     // E5
-]);
-```
-
----
-
 ## 🧭 Roadmap
 
 - [x] Cross-platform tone playback
 - [x] Native Swift/Java modules
 - [x] Waveform selection
+- [ ] Notes & chords support
 - [ ] ADSR envelope support
 - [ ] MIDI input / on-screen keyboard
 - [ ] Waveform visualizer

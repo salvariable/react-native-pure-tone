@@ -4,4 +4,4 @@ export type PlayToneParams = {
     duration?: number;
     waveform?: WaveType;
 };
-export declare function playTone(input: PlayToneParams | PlayToneParams[]): void;
+export declare function playTone({ frequency, duration, waveform }: PlayToneParams): void;

@@ -1,30 +1,23 @@
 import { NativeModules, Platform } from 'react-native';
 const { AudioModule } = NativeModules;
-export function playTone(input) {
-    const duration = (note) => note.duration ?? 1.5;
-    const waveform = (note) => note.waveform ?? 'sine';
+export function playTone({ frequency, duration = 1.5, waveform = 'sine' }) {
+    if (!frequency) {
+        console.warn('[pure-tone] Missing frequency');
+        return;
+    }
     if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        if (Array.isArray(input)) {
-            for (const note of input) {
-                AudioModule?.playToneWithWave(note.frequency, duration(note) * 1000, waveform(note));
-            }
+        if (typeof AudioModule?.playToneWithWave === 'function') {
+            AudioModule.playToneWithWave(frequency, duration * 1000, waveform);
         }
         else {
-            AudioModule?.playToneWithWave(input.frequency, duration(input) * 1000, waveform(input));
+            console.warn('[pure-tone] Native module unavailable or not supported on this platform.');
         }
     }
     else if (Platform.OS === 'web') {
-        if (Array.isArray(input)) {
-            for (const note of input) {
-                playToneWeb(note.frequency, duration(note) * 1000, waveform(note));
-            }
-        }
-        else {
-            playToneWeb(input.frequency, duration(input) * 1000, waveform(input));
-        }
+        playToneWeb(frequency, duration * 1000, waveform);
     }
     else {
-        console.warn('[pure-tone] Unsupported platform or missing native module.');
+        console.warn('[pure-tone] Unsupported platform.');
     }
 }
 function playToneWeb(freq, durationMs, wave) {
