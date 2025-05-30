@@ -1,19 +1,19 @@
 import { NativeModules, Platform } from 'react-native';
 const { AudioModule } = NativeModules;
-export function playTone(freq, durationMs = 500, wave = 'sine') {
-    if (Platform.OS === 'web') {
-        playToneWeb(freq, durationMs, wave);
-        return;
+export function playTone({ frequency, duration = 0.5, waveform = 'sine' }) {
+    if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        const durationMs = duration * 1000;
+        AudioModule?.playToneWithWave?.(frequency, durationMs, waveform);
     }
-    try {
-        AudioModule?.playToneWithWave(freq, durationMs, wave);
+    else if (Platform.OS === 'web') {
+        playToneWeb(frequency, duration, waveform);
     }
-    catch (error) {
-        console.warn('[pure-tone] Native module unavailable or failed to call playToneWithWave:', error);
+    else {
+        console.warn('[pure-tone] Platform not supported.');
     }
 }
-function playToneWeb(freq, durationMs, wave) {
-    const AudioContextClass = (window.AudioContext || window.webkitAudioContext);
+function playToneWeb(freq, duration, wave) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     const context = new AudioContextClass();
     const oscillator = context.createOscillator();
     const gainNode = context.createGain();
@@ -23,5 +23,5 @@ function playToneWeb(freq, durationMs, wave) {
     oscillator.connect(gainNode);
     gainNode.connect(context.destination);
     oscillator.start();
-    oscillator.stop(context.currentTime + durationMs / 1000);
+    oscillator.stop(context.currentTime + duration);
 }

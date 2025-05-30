@@ -1,2 +1,8 @@
 export type WaveType = 'sine' | 'square' | 'triangle' | 'sawtooth';
-export declare function playTone(freq: number, durationMs?: number, wave?: WaveType): void;
+type PlayToneParams = {
+    frequency: number;
+    duration?: number;
+    waveform?: WaveType;
+};
+export declare function playTone({ frequency, duration, waveform }: PlayToneParams): void;
+export {};

@@ -4,21 +4,25 @@ const { AudioModule } = NativeModules;
 
 export type WaveType = 'sine' | 'square' | 'triangle' | 'sawtooth';
 
-export function playTone(freq: number, durationMs = 500, wave: WaveType = 'sine'): void {
-  if (Platform.OS === 'web') {
-    playToneWeb(freq, durationMs, wave);
-    return;
-  }
+type PlayToneParams = {
+  frequency: number;
+  duration?: number; // in seconds
+  waveform?: WaveType;
+};
 
-  try {
-    AudioModule?.playToneWithWave(freq, durationMs, wave);
-  } catch (error) {
-    console.warn('[pure-tone] Native module unavailable or failed to call playToneWithWave:', error);
+export function playTone({ frequency, duration = 0.5, waveform = 'sine' }: PlayToneParams): void {
+  if (Platform.OS === 'ios' || Platform.OS === 'android') {
+    const durationMs = duration * 1000;
+    AudioModule?.playToneWithWave?.(frequency, durationMs, waveform);
+  } else if (Platform.OS === 'web') {
+    playToneWeb(frequency, duration, waveform);
+  } else {
+    console.warn('[pure-tone] Platform not supported.');
   }
 }
 
-function playToneWeb(freq: number, durationMs: number, wave: WaveType): void {
-  const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext) as typeof AudioContext;
+function playToneWeb(freq: number, duration: number, wave: WaveType): void {
+  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
   const context = new AudioContextClass();
 
   const oscillator = context.createOscillator();
@@ -32,5 +36,5 @@ function playToneWeb(freq: number, durationMs: number, wave: WaveType): void {
   gainNode.connect(context.destination);
 
   oscillator.start();
-  oscillator.stop(context.currentTime + durationMs / 1000);
+  oscillator.stop(context.currentTime + duration);
 }

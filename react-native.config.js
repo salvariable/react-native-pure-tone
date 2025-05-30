@@ -1,8 +1,14 @@
 module.exports = {
-  dependency: {
-    platforms: {
-      ios: { podspecPath: './react-native-pure-tone.podspec' },
-      android: { sourceDir: './android' },
+  dependencies: {
+    'react-native-pure-tone': {
+      platforms: {
+        android: {
+          sourceDir: './android',
+        },
+        ios: {
+          podspecPath: './react-native-pure-tone.podspec',
+        },
+      },
     },
   },
 };
