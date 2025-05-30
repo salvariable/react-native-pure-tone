@@ -47,3 +47,4 @@ android/app/build
 android/build
 android/local.properties
 android/.idea
+node_modules/
